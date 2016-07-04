@@ -1,0 +1,17 @@
+#!/bin/sh
+
+
+if [ "$#" -ge 1 ] && [ -f $1 ]; then #len = 1 and file exists.
+	filepath=$1
+	duration=${2:-3600}
+	filename=`basename $1`
+	fname=${filename%.*} #split the extension
+	
+	echo "Splitting $filename $fname by $duration seconds chunks"
+	duration=3600 #1 hour
+	ffmpeg -i $filepath -f segment -segment_time $duration -c copy $fname-%03d.mp4
+else
+	echo "usage: splitmedia filename [duration:3600]"
+	exit 2
+fi
+
